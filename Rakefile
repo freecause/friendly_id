@@ -35,12 +35,12 @@ end
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "the-perfect-gem"
+    gemspec.name = "friendly_id"
     gemspec.summary = "TODO"
-    gemspec.email = "josh@technicalpickles.com"
-    gemspec.homepage = "http://github.com/technicalpickles/the-perfect-gem"
+    gemspec.email = "dev@rakutenusa.com"
+    gemspec.homepage = "http://github.com/rakutenusa/friendly_id"
     gemspec.description = "TODO"
-    gemspec.authors = ["Josh Nichols"]
+    gemspec.authors = ["RakutenUSA"]
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
