@@ -38,7 +38,11 @@ module FriendlyId::SluggableInstanceMethods
   # Has the basis of our friendly id changed, requiring the generation of a
   # new slug?
   def new_slug_needed?
-    !slug || slug_text != slug.name
+    !slug || ((slug_text != slug.name) && replace_slug?)
+  end
+
+  def replace_slug?
+    friendly_id_options[:replace_slug_on_save]
   end
 
   # Returns the most recent slug, which is used to determine the friendly

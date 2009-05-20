@@ -13,7 +13,8 @@ module FriendlyId
     :scope => nil,
     :strip_diacritics => false,
     :strip_non_ascii => false,
-    :use_slug => false }.freeze
+    :use_slug => false,
+    :replace_slug_on_save => true }.freeze
 
   # Valid keys for has_friendly_id options.
   VALID_FRIENDLY_ID_KEYS = [
@@ -23,7 +24,8 @@ module FriendlyId
     :scope,
     :strip_diacritics,
     :strip_non_ascii,
-    :use_slug ].freeze
+    :use_slug,
+    :replace_slug_on_save ].freeze
 
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
@@ -37,6 +39,7 @@ module FriendlyId
     #
     # Options:
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
+    # * <tt>:replace_slug_on_save</tt> - 
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters.
     # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.

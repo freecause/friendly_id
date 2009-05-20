@@ -122,6 +122,11 @@ class SluggedModelTest < Test::Unit::TestCase
       end
     end
 
+    should "determine that a new slug is needed" do
+      @post.title = "Changed title"
+      assert_equal true, @post.new_slug_needed?
+    end
+
     context "and configured to strip diacritics" do
       setup do
         Post.friendly_id_options = Post.friendly_id_options.merge(:strip_diacritics => true)
@@ -258,6 +263,25 @@ class SluggedModelTest < Test::Unit::TestCase
 
     end
 
+  end
+
+  context "A slugged model with replace_slug_on_save option set to false" do
+
+    setup do
+      Post.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:column => :title, :use_slug => true, :replace_slug_on_save => false)
+      @post = Post.new :title => "Test post", :content => "Test content"
+      @post.save!
+    end
+    
+    should "decide to not replace a slug" do
+      assert_equal false, @post.replace_slug?
+    end
+    
+    should "determine that a new slug is not needed" do
+      @post.title = "Changed title"
+      assert_equal false, @post.new_slug_needed?
+    end
+    
   end
 
 end
