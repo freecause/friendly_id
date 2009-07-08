@@ -219,30 +219,19 @@ While FriendlyId's slug generation options work for most people, you may need
 something else. As of version 2.0.4 you can pass in your own custom slug
 generation block:
 
-  require 'stringex'
   class Post < ActiveRecord::Base
     has_friendly_id :title, :use_slug => true do |text|
-      # User stringex to generate the friendly_id rather than the baked-in methods
-      text.to_url
+      MySlugGeneratorClass::my_slug_method(text)
     end
   end
   
-  ...
-  
-  @post = Post.create(:title => "tell your readers 你好")
-  @post.friendly_id # "tell-your-readers-ni-hao"
-
 FriendlyId will still respect your settings for max length and reserved words,
 but will use your block rather than the baked-in methods to normalize the
 friendly_id text.
 
-(As an aside, the stringex[http://github.com/rsl/stringex/tree/master] library
-provides some very cool slugging functionality and is a great option for
-apps using FriendlyId in either English or Chinese. Definitely check it out.)
-
 == Getting it
 
-FriendlyId is installed as a Ruby Gem:
+FriendlyId is best installed as a Ruby Gem:
 
   gem install friendly_id
 
@@ -251,15 +240,11 @@ discouraged:
 
   ./script/plugin install git://github.com/norman/friendly_id.git
 
-If you are installing as a plugin, make sure you have installed the unicode gem,
-which FriendlyId depends on:
-
-  gem install unicode
-
-
 == Setting it up
 
-FriendlyId currently works with Rails 2.0.0 - 2.3.0. Here's how to set it up.
+The current release works with Rails 2.2 and above, and is compatible with
+Ruby 1.8 and 1.9. If you need support for Rails 2.0 - 2.1, you need to install
+an older version of FriendlyId. Here's how to set it up.
 
 1) Install the Gem:
 
@@ -285,16 +270,27 @@ FriendlyId currently works with Rails 2.0.0 - 2.3.0. Here's how to set it up.
 4) If you are using slugs, you can use a Rake task to generate slugs for your
 existing records:
 
-friendly_id:make_slugs MODEL=MyModelName
+rake friendly_id:make_slugs MODEL=MyModelName
 
 If you eventually want to expire old slugs every so often, or perhaps every
 day via cron, you can do:
 
-rake:friendly_id:remove_old_slugs
+rake friendly_id:remove_old_slugs
 
 The default is to remove dead slugs older than 45 days, but is configurable:
 
-rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
+rake friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
+
+== Installing an older version
+
+If you are still on Rails 2.1 or lower, please install version 2.0.4:
+
+gem install friendly_id --version 2.0.4
+
+Note that this version depends on the Unicode gem, which doesn't compile on
+Windows and is incompatible with Ruby 1.9. It also can't be installed on
+Heroku. If these are problems, you'll need to update your application to Rails
+2.2 or higher and use the current release of FriendlyId.
 
 == Upgrading from an older version
 
@@ -325,7 +321,7 @@ Add this to the bottom of environment.rb:
 
 ====  Generate the upgrade migration and run it
 
-  ./script generate friendly_id_20_upgrade
+  ./script/generate friendly_id_20_upgrade
   rake db:migrate
 
 == Hacking FriendlyId:

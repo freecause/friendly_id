@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 ActiveRecord::Schema.define(:version => 1) do
 
   create_table "books", :force => true do |t|
@@ -12,6 +14,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table "posts", :force => true do |t|
     t.column "title", "string"
     t.column "content", "text"
+    t.column "published", "boolean", :default => false
     t.column "created_at", "datetime"
     t.column "updated_at", "datetime"
   end
@@ -30,6 +33,11 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table "countries", :force => true do |t|
     t.column "name", "string"
+  end
+
+  create_table "events", :force => true do |t|
+    t.column "name", "string"
+    t.column "event_date", "datetime"
   end
 
   create_table "slugs", :force => true do |t|

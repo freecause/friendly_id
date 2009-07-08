@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module FriendlyId::SluggableClassMethods
 
   include FriendlyId::Helpers
@@ -63,7 +65,7 @@ module FriendlyId::SluggableClassMethods
     find_options[:conditions] = "#{quoted_table_name}.#{primary_key} IN (#{ids.empty? ? 'NULL' : ids.join(',')}) "
     find_options[:conditions] << "OR slugs.id IN (#{slugs.to_s(:db)})"
 
-    results = with_scope(:find => find_options) { find_every(options) }
+    results = with_scope(:find => find_options) { find_every(options) }.uniq
 
     expected = expected_size(ids_and_names, options)
     if results.size != expected
@@ -97,7 +99,7 @@ module FriendlyId::SluggableClassMethods
     slugs = []
     ids = []
     ids_and_names.each do |id_or_name|
-      name, sequence = Slug.parse id_or_name
+      name, sequence = Slug.parse id_or_name.to_s
       slug = Slug.find(:first, :conditions => {
         :name           => name,
         :scope          => scope,
@@ -106,7 +108,7 @@ module FriendlyId::SluggableClassMethods
       })
       # If the slug was found, add it to the array for later use. If not, and
       # the id_or_name is a number, assume that it is a regular record id.
-      slug ? slugs << slug : (ids << id_or_name if id_or_name =~ /\A\d*\z/)
+      slug ? slugs << slug : (ids << id_or_name if id_or_name.to_s =~ /\A\d*\z/)
     end
     return slugs, ids
   end
