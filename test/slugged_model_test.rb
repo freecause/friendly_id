@@ -32,6 +32,12 @@ class SluggedModelTest < Test::Unit::TestCase
       assert Post.find(@post.id)
     end
 
+    should "not be findable by its id if looking for something else" do
+      assert_raises ActiveRecord::RecordNotFound do
+        Post.find("#{@post.id}-i-dont-exists")
+      end
+    end
+
     should "generate slug text" do
       post = Post.new :title => "Test post", :content => "Test content"
       assert_not_nil @post.slug_text
@@ -293,7 +299,6 @@ class SluggedModelTest < Test::Unit::TestCase
 
   end
 
-<<<<<<< HEAD:test/slugged_model_test.rb
   context "A slugged model with replace_slug_on_save option set to false" do
 
     setup do
@@ -314,6 +319,3 @@ class SluggedModelTest < Test::Unit::TestCase
   end
 
 end
-=======
-end
->>>>>>> 685d680... Fixed mishandling of big ids (thanks Nathan Phelps):test/slugged_model_test.rb
